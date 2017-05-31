@@ -47,9 +47,9 @@ namespace :wpcli do
         end
       end
 
-      unless roles(:dev).empty?
-        on roles(:dev) do
-          within fetch(:dev_path) do
+      unless roles(:development).empty?
+        on roles(:development) do
+          within fetch(:development_path) do
             local_tmp_file = fetch(:wpcli_local_db_file).gsub(/\.gz$/, "")
             upload! fetch(:wpcli_local_db_file), fetch(:wpcli_local_db_file)
             execute :gunzip, "-c", fetch(:wpcli_local_db_file), ">", local_tmp_file
@@ -74,9 +74,9 @@ namespace :wpcli do
 
     desc "Push the local database"
     task :push do
-      unless roles(:dev).empty?
-        on roles(:dev) do
-          within fetch(:dev_path) do
+      unless roles(:development).empty?
+        on roles(:development) do
+          within fetch(:development_path) do
             execute :wp, :db, :export, "- |", :gzip, ">", fetch(:wpcli_local_db_file)
             download! fetch(:wpcli_local_db_file), fetch(:wpcli_local_db_file)
           end
@@ -96,9 +96,9 @@ namespace :wpcli do
           execute :wp, "search-replace", fetch(:wpcli_local_url), fetch(:wpcli_remote_url), fetch(:wpcli_args) || "--skip-columns=guid", "--url=" + fetch(:wpcli_local_url)
         end
       end
-      unless roles(:dev).empty?
-        on roles(:dev) do
-          within fetch(:dev_path) do
+      unless roles(:development).empty?
+        on roles(:development) do
+          within fetch(:development_path) do
             execute :rm, fetch(:wpcli_local_db_file)
           end
         end
